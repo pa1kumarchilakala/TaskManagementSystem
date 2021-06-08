@@ -12,7 +12,7 @@
 
 2. Application is created using dotnet cli.
 
-3. Application is divided into multiple layers
+3. Application is divided into multiple layers using Clean Architecture
 
     1. database
           - DDL
