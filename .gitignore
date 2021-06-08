@@ -1,0 +1,21 @@
+﻿################################################################################
+# This .gitignore file was automatically created by Microsoft(R) Visual Studio.
+################################################################################
+
+/.vs
+/tests/UnitTests/TaskManagementSystem.APITests/obj
+/tests/UnitTests/TaskManagementSystem.APITests/bin/Debug/net5.0
+/src/TaskManagementSystem.API/TaskManagementSystem.API/obj
+/src/TaskManagementSystem.API/TaskManagementSystem.API/bin/Debug/net5.0
+/src/TaskManagementSystem.APIGateWay/TaskManagementSystem.APIGateway/obj
+/src/TaskManagementSystem.APIGateWay/TaskManagementSystem.APIGateway/bin/Debug/net5.0
+/src/TaskManagementSystem.ApplicationCore/TaskManagementSystem.ApplicationCore/obj
+/src/TaskManagementSystem.ApplicationCore/TaskManagementSystem.ApplicationCore/bin/Debug/net5.0
+/src/TaskManagementSystem.DependencyInjection/TaskManagementSystem.DependencyInjection/obj
+/src/TaskManagementSystem.DependencyInjection/TaskManagementSystem.DependencyInjection/bin/Debug/net5.0
+/src/TaskManagementSystem.Domain/TaskManagementSystem.Domain/obj
+/src/TaskManagementSystem.Domain/TaskManagementSystem.Domain/bin/Debug/net5.0
+/src/TaskManagementSystem.Infrastructure/TaskManagementSystem.Infrastructure.Data/obj
+/src/TaskManagementSystem.Infrastructure/TaskManagementSystem.Infrastructure.Data/bin/Debug/net5.0
+/src/TaskManagementSystem.UI/TaskManagementSystem.UI/obj
+/src/TaskManagementSystem.UI/TaskManagementSystem.UI/bin/Debug/net5.0
