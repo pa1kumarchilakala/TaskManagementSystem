@@ -6,7 +6,9 @@ using System.Threading.Tasks;
 
 namespace TaskManagementSystem.ApplicationCore.ViewModels
 {
-    class TaskViewModel
+    public class StatusLookupViewModel
     {
+        public string Code { get; set; }
+        public string Status { get; set; }
     }
 }
