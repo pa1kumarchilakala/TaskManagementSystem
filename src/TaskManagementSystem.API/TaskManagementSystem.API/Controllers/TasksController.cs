@@ -23,32 +23,26 @@ namespace TaskManagementSystem.API.Controllers
             this._tasksService = tasksService;
         }
         // GET: api/<TasksController>
-        [HttpGet]
+        //[HttpPost("CreateTask")]
+        [HttpPost]
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<int> CreateTask([FromBody] TasksViewModel task)
+        public async Task<IActionResult> CreateTask([FromBody] TasksViewModel task)
         {
             if (ModelState.IsValid)
             {
-                try
-                {
-                    await _tasksService.CreateTask(task);
-                    return StatusCodes.Status201Created;
-                }
-                catch
-                {
-                    return StatusCodes.Status500InternalServerError;
-                }
+                await _tasksService.CreateTask(task);
+                return CreatedAtAction(nameof(CreateTask), new { id = task.Id }, task);
             }
             else
-                return StatusCodes.Status400BadRequest;
+                return BadRequest(task);
         }
 
         // GET api/<TasksController>/5
+        //[HttpGet("GetAllTasks")]
+        //[HttpHead("GetAllTasks")]
         [HttpGet]
-        [HttpHead]
-        [ProducesResponseType(StatusCodes.Status200OK)]
         public async Task<IActionResult> GetAllTasks()
         {
             var tasks = await _tasksService.GetAllTasks();
@@ -56,15 +50,17 @@ namespace TaskManagementSystem.API.Controllers
             return Ok(tasks);
         }
 
-        [HttpGet("id")]
-        public async Task<IActionResult> GetSubTasks(int id)
+        //[HttpGet("GetSubTasks/parentTaskId")]
+        [HttpGet("{id}/{isParent}")]
+        public async Task<IActionResult> GetSubTasks(int id, bool isParent = false)
         {
-            var tasks = await _tasksService.GetSubTasks(id);
-            return Ok(tasks);
+            if (isParent) return Ok(await _tasksService.GetSubTasks(id));
+            
+            return Ok(_tasksService.GetTask(id));
         }
 
         // POST api/<TasksController>
-        [HttpGet("id")]
+        [HttpGet("{id}")]
         public async Task<IActionResult> GetTask(int id)
         {
             var tasks = await _tasksService.GetTask(id);
@@ -75,66 +71,17 @@ namespace TaskManagementSystem.API.Controllers
         [HttpPut]
         public async Task<IActionResult> UpdateTask([FromBody] TasksViewModel tasksViewModel)
         {
-            var task = await _tasksService.GetTask(tasksViewModel.Id);
+            var result = await _tasksService.UpdateTask(tasksViewModel);
+
+            if (result == ValidateTasksConstants.NoTasksFound)
+                return NotFound();
+            else if (result == ValidateTasksConstants.NoSubTaskInProgress)
+                return BadRequest(ValidateTasksConstants.NoSubTaskInProgress);
+            else if(result == ValidateTasksConstants.SubTaskPlanned)
+                return BadRequest(ValidateTasksConstants.SubTaskPlanned);
             
-            if (task == null || task.Id < 1)
-                return BadRequest(ValidateTasks.NoTasksFound);
-
-            if (tasksViewModel?.ParentTask == 0 || tasksViewModel?.ParentTask == null) //If it is a parent task then check for sub tasks and validate
-            {
-                string subTasksstatus = await ValidateSubTasks(tasksViewModel);
-
-                if (!string.IsNullOrEmpty(subTasksstatus))
-                    return BadRequest(subTasksstatus);
-            }
-            return NoContent();
+            return Ok();
         }
-
-        [NonAction]
-        public async Task<string> ValidateSubTasks(TasksViewModel tasksViewModel)
-        {
-            var subTasks = await _tasksService.GetSubTasks(tasksViewModel.Id);
-            if (subTasks.Count > 0)
-            {
-                string validationStatus = string.Empty;
-
-                switch (tasksViewModel?.State)
-                {
-                    case StatusLookUpConstants.Planned://Validate completed sub tasks
-                        validationStatus = ValidatePlannedSubTasks(subTasks);
-                        break;
-
-                    case StatusLookUpConstants.InProgress://Validate In-progress sub tasks
-                        validationStatus = ValidateInProgressSubTasks(subTasks);
-                        break;
-                }
-
-                if (!string.IsNullOrEmpty(validationStatus))
-                    return validationStatus;
-            }
-            return string.Empty;
-        }
-
-        [NonAction]
-        public string ValidateInProgressSubTasks(IList<TasksViewModel> tasksViewModel)
-        {
-            var tasks = tasksViewModel.Where(task => task.State == StatusLookUpConstants.InProgress).FirstOrDefault();
-
-            if (tasks != null && tasks.Id > 0)
-                return ValidateTasks.SubTaskInProgress;
-            else
-                return string.Empty;
-        }
-
-        [NonAction]
-        public string ValidatePlannedSubTasks(IList<TasksViewModel> tasksViewModel)
-        {
-            var tasks = tasksViewModel.Where(task => task.State == StatusLookUpConstants.Planned).FirstOrDefault();
-
-            if (tasks != null && tasks.Id > 0)
-                return ValidateTasks.SubTaskPlanned;
-            else
-                return string.Empty;
-        }
+        
     }
 }

@@ -18,6 +18,8 @@ namespace TaskManagementSystem.ApplicationCore.MappingProfiles
 
             ////View to Domain
             CreateMap<TasksViewModel, Tasks>();
+
+            
         }
     }
 }

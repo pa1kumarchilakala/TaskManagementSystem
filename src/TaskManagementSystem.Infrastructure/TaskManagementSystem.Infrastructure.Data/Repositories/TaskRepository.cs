@@ -9,7 +9,7 @@ using TaskManagementSystem.Infrastructure.Data.Models;
 
 namespace TaskManagementSystem.Infrastructure.Data.Repositories
 {
-    public class TaskRepository : ITaskRepository
+    public class TaskRepository : ITaskRepository, IDisposable
     {
         private readonly TaskManagementContext _dbContext;
 
@@ -47,18 +47,15 @@ namespace TaskManagementSystem.Infrastructure.Data.Repositories
             return await _dbContext.Tasks.Where(task => task.Id == taskId).FirstOrDefaultAsync();
         }
 
-        public async Task<bool> UpdateTask(Tasks task)
+        public async Task UpdateTask(Tasks task)
         {
-            try
-            {
-                _dbContext.Tasks.Update(task);
-                await _dbContext.SaveChangesAsync();
-            }
-            catch (Exception)
-            {
-                return false;
-            }
-            return true;
+
+            _dbContext.Tasks.Update(task);
+            await _dbContext.SaveChangesAsync();
+        }
+        public void Dispose()
+        {
+            _dbContext.DisposeAsync();
         }
     }
 }

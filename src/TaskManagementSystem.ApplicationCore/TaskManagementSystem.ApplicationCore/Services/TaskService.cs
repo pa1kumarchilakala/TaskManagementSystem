@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using TaskManagementSystem.ApplicationCore.Constants;
 using TaskManagementSystem.ApplicationCore.Interfaces;
 using TaskManagementSystem.ApplicationCore.ViewModels;
 using TaskManagementSystem.Domain.Interfaces;
@@ -50,11 +51,79 @@ namespace TaskManagementSystem.ApplicationCore.Services
             return _mapper.Map<TasksViewModel>(task);
         }
 
-        public async Task<bool> UpdateTask(TasksViewModel tasksVM)
+        public async Task<string> UpdateTask(TasksViewModel tasksVM)
         {
-            var task = _mapper.Map<Tasks>(tasksVM);
+            string taskValidation = await ValidateTasks(tasksVM);
+            if (!string.IsNullOrEmpty(taskValidation))
+                return taskValidation;
 
-            return await _taskRepository.UpdateTask(task);
+            var task = _mapper.Map<Tasks>(tasksVM);
+            if (task.State == StatusLookUpConstants.Completed)
+                task.FinishDate = DateTime.Now.Date;
+
+            await _taskRepository.UpdateTask(task);
+
+            return ValidateTasksConstants.UpdateSuccess;
+        }
+
+        private async Task<string> ValidateTasks(TasksViewModel tasksVM)
+        {
+            var task = await _taskRepository.GetTask(tasksVM.Id);
+
+            if(task !=null && task.Id > 0)
+            {
+                if (task?.ParentTask == 0 || task?.ParentTask == null)
+                {
+                    return await ValidateSubTasks(task);
+                }
+                return string.Empty;
+            }
+            task = null;
+            return ValidateTasksConstants.NoTasksFound;
+        }
+
+        private async Task<string> ValidateSubTasks(Tasks tasks)
+        {
+            var subTasks = await _taskRepository.GetSubTasks(tasks.Id);
+            if (subTasks.Count > 0)
+            {
+                string validationStatus = string.Empty;
+
+                switch (tasks?.State)
+                {
+                    case StatusLookUpConstants.Planned://Validate completed sub tasks
+                        validationStatus = ValidatePlannedSubTasks(subTasks);
+                        break;
+
+                    case StatusLookUpConstants.InProgress://Validate In-progress sub tasks
+                        validationStatus = ValidateInProgressSubTasks(subTasks);
+                        break;
+                }
+
+                if (!string.IsNullOrEmpty(validationStatus))
+                    return validationStatus;
+            }
+            return string.Empty;
+        }
+
+        private string ValidateInProgressSubTasks(IList<Tasks> Tasks)
+        {
+            var tasks = Tasks.Where(task => task.State == StatusLookUpConstants.InProgress).FirstOrDefault();
+
+            if (tasks == null || tasks.Id == 0)
+                return ValidateTasksConstants.NoSubTaskInProgress;
+            else
+                return string.Empty;
+        }
+
+        private string ValidatePlannedSubTasks(IList<Tasks> Tasks)
+        {
+            var tasks = Tasks.Where(task => task.State == StatusLookUpConstants.Planned).FirstOrDefault();
+
+            if (tasks != null && tasks.Id > 0)
+                return ValidateTasksConstants.SubTaskPlanned;
+            else
+                return string.Empty;
         }
     }
 }

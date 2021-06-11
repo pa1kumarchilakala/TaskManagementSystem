@@ -18,6 +18,6 @@ namespace TaskManagementSystem.ApplicationCore.Interfaces
 
         Task<TasksViewModel> GetTask(int taskId);
 
-        Task<bool> UpdateTask(TasksViewModel tasksVM);
+        Task<string> UpdateTask(TasksViewModel tasksVM);
     }
 }

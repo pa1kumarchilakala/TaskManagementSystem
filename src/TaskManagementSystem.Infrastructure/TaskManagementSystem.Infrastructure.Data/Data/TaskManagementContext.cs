@@ -21,14 +21,6 @@ namespace TaskManagementSystem.Infrastructure.Data.Models
         public virtual DbSet<StatusLookUp> StatusLookUps { get; set; }
         public virtual DbSet<Tasks> Tasks { get; set; }
 
-        //protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-        //{
-        //    if (!optionsBuilder.IsConfigured)
-        //    {
-        //        optionsBuilder.UseSqlServer("Data Source=(LocalDb)\\MSSQLLocalDB;Initial Catalog=TaskManagement;Integrated Security=True");
-        //    }
-        //}
-
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.HasAnnotation("Relational:Collation", "SQL_Latin1_General_CP1_CI_AS");
@@ -93,5 +85,6 @@ namespace TaskManagementSystem.Infrastructure.Data.Models
         }
 
         partial void OnModelCreatingPartial(ModelBuilder modelBuilder);
+
     }
 }

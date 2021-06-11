@@ -1,0 +1,46 @@
+{
+  "Routes": [
+    {
+      "DownstreamPathTemplate": "/api/Tasks",
+      "DownstreamScheme": "https",
+      "DownstreamHostandPorts": [
+        {
+          "Host": "localhost",
+          "Port": 44335
+        }
+      ],
+      "UpstreamPathTemplate": "/gateway/Tasks",
+      "UpstreamHttpMethod": [ "GET", "POST", "PUT" ]
+
+    },
+    {
+      "DownstreamPathTemplate": "/api/Tasks/{id}",
+      "DownstreamScheme": "https",
+      "DownstreamHostandPorts": [
+        {
+          "Host": "localhost",
+          "Port": 44335
+        }
+      ],
+      "UpstreamPathTemplate": "/gateway/Tasks/{id}",
+      "UpstreamHttpMethod": [ "GET" ]
+
+    },
+    {
+      "DownstreamPathTemplate": "/api/Tasks/{id}/{isParent}",
+      "DownstreamScheme": "https",
+      "DownstreamHostandPorts": [
+        {
+          "Host": "localhost",
+          "Port": 44335
+        }
+      ],
+      "UpstreamPathTemplate": "/gateway/Tasks/{id}/{isParent}",
+      "UpstreamHttpMethod": [ "GET" ]
+
+    }
+  ],
+  "GlobalConfiguration": {
+    "BaseUrl": "https://localhost:5021"
+  }
+}

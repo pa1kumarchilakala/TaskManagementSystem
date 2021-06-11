@@ -13,10 +13,11 @@ namespace TaskManagementSystem.ApplicationCore.Constants
         public const string Planned = "PL";
     }
 
-    public static class ValidateTasks
+    public static class ValidateTasksConstants
     {
-        public const string SubTaskInProgress = "One or more sub tasks are still In-progress status";
+        public const string NoSubTaskInProgress = "No sub tasks are in-progress status. Please make atleast one sub task as in-progress.";
         public const string NoTasksFound = "No tasks found";
         public const string SubTaskPlanned = "One or more sub tasks is still in Planned status.";
+        public const string UpdateSuccess = "Task updated successfully";
     }
 }

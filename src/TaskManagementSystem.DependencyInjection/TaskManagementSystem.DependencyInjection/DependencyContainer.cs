@@ -8,6 +8,7 @@ using TaskManagementSystem.Infrastructure.Data.Repositories;
 using TaskManagementSystem.ApplicationCore.Interfaces;
 using TaskManagementSystem.ApplicationCore.Services;
 using System.Reflection;
+using TaskManagementSystem.ApplicationCore.MappingProfiles;
 
 namespace TaskManagementSystem.DependencyInjection
 {
@@ -16,9 +17,11 @@ namespace TaskManagementSystem.DependencyInjection
         public static IServiceCollection AddDependencies(this IServiceCollection services, IConfiguration configuration)
         {
             //Add Connection String
-            services.AddDbContext<TaskManagementContext>(options =>
-                options.UseSqlServer(configuration.GetSection("ConnectionStrings:DefaultConnection").ToString())
-            );
+            //services.AddDbContext<TaskManagementContext>(options =>
+            //    options.EnableSensitiveDataLogging().UseSqlServer(configuration.GetSection("ConnectionStrings:DefaultConnection").Value)
+            //);
+            services.AddDbContext<TaskManagementContext>(options => 
+                options.UseSqlServer(configuration.GetSection("ConnectionStrings:DefaultConnection").Value) , ServiceLifetime.Scoped);
 
             //TaskManagementSystem.Domain Dependencies
             services.AddScoped<ITaskRepository, TaskRepository>();
@@ -27,7 +30,8 @@ namespace TaskManagementSystem.DependencyInjection
             services.AddScoped<ITaskService, TaskService>();
 
             //Automapper
-            services.AddAutoMapper(Assembly.GetExecutingAssembly());
+            
+            services.AddAutoMapper(typeof (TaskMappingProfiles));
 
             return services;
         }

@@ -7,7 +7,7 @@ using TaskManagementSystem.Infrastructure.Data.Models;
 
 namespace TaskManagementSystem.Domain.Interfaces
 {
-    public interface ITaskRepository
+    public interface ITaskRepository:IDisposable
     {
         Task<bool> CreateTask(Tasks tasks);
 
@@ -17,6 +17,7 @@ namespace TaskManagementSystem.Domain.Interfaces
 
         Task<Tasks> GetTask(int taskId);
 
-        Task<bool> UpdateTask(Tasks task);
+        Task UpdateTask(Tasks task);
+
     }
 }

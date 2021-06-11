@@ -14,6 +14,7 @@ namespace TaskManagementSystem.APIGateway
         public static void Main(string[] args)
         {
             CreateHostBuilder(args).Build().Run();
+            
         }
 
         public static IHostBuilder CreateHostBuilder(string[] args) =>
@@ -21,6 +22,9 @@ namespace TaskManagementSystem.APIGateway
                 .ConfigureWebHostDefaults(webBuilder =>
                 {
                     webBuilder.UseStartup<Startup>();
-                });
+                    webBuilder.ConfigureAppConfiguration(config =>
+                    config.AddJsonFile($"ocelot.json"));
+                })
+            .ConfigureLogging(log => log.AddConsole());
     }
 }
