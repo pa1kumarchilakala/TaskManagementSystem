@@ -57,11 +57,17 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{E584A2FD
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "UnitTests", "UnitTests", "{CB547C70-6ACD-4807-88F8-DF4A58936D76}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TaskManagementSystem.APITests", "tests\UnitTests\TaskManagementSystem.APITests\TaskManagementSystem.APITests.csproj", "{CA587DB7-A895-4346-BD19-ABCD0CB5D612}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TaskManagementSystem.APITests", "tests\UnitTests\TaskManagementSystem.APITests\TaskManagementSystem.APITests.csproj", "{CA587DB7-A895-4346-BD19-ABCD0CB5D612}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "IntegrationTests", "IntegrationTests", "{40FB9797-7928-4940-8F12-6A9786577ED9}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TaskManagementSystem.GatewayTests", "tests\IntegrationTests\TaskManagementSystem.GatewayTests\TaskManagementSystem.GatewayTests.csproj", "{2462B716-924E-4E07-B8C7-0812893F112B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TaskManagementSystem.GatewayTests", "tests\IntegrationTests\TaskManagementSystem.GatewayTests\TaskManagementSystem.GatewayTests.csproj", "{2462B716-924E-4E07-B8C7-0812893F112B}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Screenshots", "Screenshots", "{0901EA25-71E0-4749-8EB0-1B45FC834CF8}"
+	ProjectSection(SolutionItems) = preProject
+		database\Screenshots\Screenshot_StatusLookup_Table.JPG = database\Screenshots\Screenshot_StatusLookup_Table.JPG
+		database\Screenshots\Screenshot_Tasks_Table.JPG = database\Screenshots\Screenshot_Tasks_Table.JPG
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -208,6 +214,7 @@ Global
 		{CA587DB7-A895-4346-BD19-ABCD0CB5D612} = {CB547C70-6ACD-4807-88F8-DF4A58936D76}
 		{40FB9797-7928-4940-8F12-6A9786577ED9} = {E584A2FD-98FB-49F3-89BF-4E2AD5F0110C}
 		{2462B716-924E-4E07-B8C7-0812893F112B} = {40FB9797-7928-4940-8F12-6A9786577ED9}
+		{0901EA25-71E0-4749-8EB0-1B45FC834CF8} = {0A7D6EE6-7BF1-43F6-BB69-8F62416F34B8}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {2545E5D1-E899-47E8-B8D6-C7F53942DD8F}
