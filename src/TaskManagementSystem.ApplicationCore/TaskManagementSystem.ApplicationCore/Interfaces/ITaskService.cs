@@ -18,7 +18,7 @@ namespace TaskManagementSystem.ApplicationCore.Interfaces
 
         Task<TasksViewModel> GetTask(int? taskId);
 
-        Task<IList<Tasks>> GetTasksByStatus(string status);
+        Task<List<TasksViewModel>> GetTasksByStatus(string status);
 
         Task<string> UpdateTask(TasksViewModel tasksVM);
     }

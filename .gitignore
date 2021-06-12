@@ -21,3 +21,5 @@
 /src/TaskManagementSystem.UI/TaskManagementSystem.UI/bin/Debug/net5.0
 /tests/IntegrationTests/TaskManagementSystem.GatewayTests/obj
 /tests/IntegrationTests/TaskManagementSystem.GatewayTests/bin/Debug/net5.0
+/src/TaskManagementSystem.Infrastructure/TaskManagementSystem.Infrastructure.Utilities/bin/Debug/net5.0
+/src/TaskManagementSystem.Infrastructure/TaskManagementSystem.Infrastructure.Utilities/obj

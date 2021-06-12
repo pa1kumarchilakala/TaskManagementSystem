@@ -10,6 +10,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\TaskManagementSystem.DependencyInjection\TaskManagementSystem.DependencyInjection\TaskManagementSystem.DependencyInjection.csproj" />
+    <ProjectReference Include="..\..\TaskManagementSystem.Infrastructure\TaskManagementSystem.Infrastructure.Utilities\TaskManagementSystem.Infrastructure.Utilities.csproj" />
   </ItemGroup>
 
 </Project>

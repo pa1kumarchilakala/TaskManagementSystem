@@ -1,12 +1,11 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using System;
-using System.Collections.Generic;
-using System.Linq;
+using System.IO;
 using System.Threading.Tasks;
 using TaskManagementSystem.ApplicationCore.Constants;
 using TaskManagementSystem.ApplicationCore.Interfaces;
 using TaskManagementSystem.ApplicationCore.ViewModels;
+using TaskManagementSystem.Infrastructure.Utilities.Utilities;
 
 namespace TaskManagementSystem.API.Controllers
 {
@@ -90,14 +89,19 @@ namespace TaskManagementSystem.API.Controllers
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         [HttpGet]
-        public async Task<IActionResult> GetTasksByStatus([FromQuery] string status)
+        public async Task<IActionResult> GetReportByStatus([FromQuery] string status)
         {
             var tasks = await _tasksService.GetTasksByStatus(status);
 
             if (tasks == null)
                 return NotFound();
 
-            return Ok(tasks);
+            Stream dataStream = Convertors.ConvertObjectToCSV(tasks);
+            
+            if (dataStream == null)
+                return NotFound();
+
+            return File(dataStream, "application/csv", "Tasks.csv");
         }
 
         [ProducesResponseType(StatusCodes.Status200OK)]
@@ -123,3 +127,4 @@ namespace TaskManagementSystem.API.Controllers
 
     }
 }
+//

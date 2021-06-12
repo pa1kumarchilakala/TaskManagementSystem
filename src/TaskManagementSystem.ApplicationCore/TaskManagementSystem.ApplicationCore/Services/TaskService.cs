@@ -71,9 +71,10 @@ namespace TaskManagementSystem.ApplicationCore.Services
         /// </summary>
         /// <param name="status"></param>
         /// <returns></returns>
-        public async Task<IList<Tasks>> GetTasksByStatus(string status)
+        public async Task<List<TasksViewModel>> GetTasksByStatus(string status)
         {
-            return await _taskRepository.GetTasksByStatus(status);
+            var tasks = await _taskRepository.GetTasksByStatus(status);
+            return _mapper.Map<List<TasksViewModel>>(tasks);
         }
 
         /// <summary>

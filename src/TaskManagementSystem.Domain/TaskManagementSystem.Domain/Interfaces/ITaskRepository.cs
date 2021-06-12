@@ -17,7 +17,7 @@ namespace TaskManagementSystem.Domain.Interfaces
 
         Task<Tasks> GetTask(int? taskId);
 
-        Task<IList<Tasks>> GetTasksByStatus(string status);
+        Task<List<Tasks>> GetTasksByStatus(string status);
 
         Task UpdateTask(Tasks task);
 

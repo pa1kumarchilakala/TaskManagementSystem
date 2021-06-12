@@ -69,6 +69,15 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Screenshots", "Screenshots"
 		database\Screenshots\Screenshot_Tasks_Table.JPG = database\Screenshots\Screenshot_Tasks_Table.JPG
 	EndProjectSection
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TaskManagementSystem.Infrastructure.Utilities", "src\TaskManagementSystem.Infrastructure\TaskManagementSystem.Infrastructure.Utilities\TaskManagementSystem.Infrastructure.Utilities.csproj", "{34E8F5B3-558C-45BA-B603-8484739543DC}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "reports", "reports", "{391F0365-3093-4423-9DAD-5795580BD64C}"
+	ProjectSection(SolutionItems) = preProject
+		reports\Report_Tasks_Completed.csv = reports\Report_Tasks_Completed.csv
+		reports\Report_Tasks_Inprogress.csv = reports\Report_Tasks_Inprogress.csv
+		reports\Report_Tasks_Planned.csv = reports\Report_Tasks_Planned.csv
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -187,6 +196,18 @@ Global
 		{2462B716-924E-4E07-B8C7-0812893F112B}.Release|x64.Build.0 = Release|Any CPU
 		{2462B716-924E-4E07-B8C7-0812893F112B}.Release|x86.ActiveCfg = Release|Any CPU
 		{2462B716-924E-4E07-B8C7-0812893F112B}.Release|x86.Build.0 = Release|Any CPU
+		{34E8F5B3-558C-45BA-B603-8484739543DC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{34E8F5B3-558C-45BA-B603-8484739543DC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{34E8F5B3-558C-45BA-B603-8484739543DC}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{34E8F5B3-558C-45BA-B603-8484739543DC}.Debug|x64.Build.0 = Debug|Any CPU
+		{34E8F5B3-558C-45BA-B603-8484739543DC}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{34E8F5B3-558C-45BA-B603-8484739543DC}.Debug|x86.Build.0 = Debug|Any CPU
+		{34E8F5B3-558C-45BA-B603-8484739543DC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{34E8F5B3-558C-45BA-B603-8484739543DC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{34E8F5B3-558C-45BA-B603-8484739543DC}.Release|x64.ActiveCfg = Release|Any CPU
+		{34E8F5B3-558C-45BA-B603-8484739543DC}.Release|x64.Build.0 = Release|Any CPU
+		{34E8F5B3-558C-45BA-B603-8484739543DC}.Release|x86.ActiveCfg = Release|Any CPU
+		{34E8F5B3-558C-45BA-B603-8484739543DC}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -215,6 +236,7 @@ Global
 		{40FB9797-7928-4940-8F12-6A9786577ED9} = {E584A2FD-98FB-49F3-89BF-4E2AD5F0110C}
 		{2462B716-924E-4E07-B8C7-0812893F112B} = {40FB9797-7928-4940-8F12-6A9786577ED9}
 		{0901EA25-71E0-4749-8EB0-1B45FC834CF8} = {0A7D6EE6-7BF1-43F6-BB69-8F62416F34B8}
+		{34E8F5B3-558C-45BA-B603-8484739543DC} = {33880DEE-B184-4239-BDBA-60C5C32342B6}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {2545E5D1-E899-47E8-B8D6-C7F53942DD8F}

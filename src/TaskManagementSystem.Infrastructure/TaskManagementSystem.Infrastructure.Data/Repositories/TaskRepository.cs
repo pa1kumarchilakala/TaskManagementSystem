@@ -47,7 +47,7 @@ namespace TaskManagementSystem.Infrastructure.Data.Repositories
             return await _dbContext.Tasks.AsNoTracking().Where(task => task.Id == taskId).FirstOrDefaultAsync();
         }
 
-        public async Task<IList<Tasks>> GetTasksByStatus(string status)
+        public async Task<List<Tasks>> GetTasksByStatus(string status)
         {
             return await _dbContext.Tasks.Where(task => task.State == status).ToListAsync();
         }
