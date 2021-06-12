@@ -22,35 +22,65 @@ namespace TaskManagementSystem.ApplicationCore.Services
             this._taskRepository = taskRepository;
             this._mapper = mapper;
         }
-
+        /// <summary>
+        /// Creates a task. Receives the task object from API layer and sends to infra(data) layer to insert record in Database using EFCore.
+        /// </summary>
+        /// <param name="tasksVM"></param>
+        /// <returns></returns>
         public async Task<bool> CreateTask(TasksViewModel tasksVM)
         {
             var tasks = _mapper.Map<Tasks>(tasksVM);
 
             return await _taskRepository.CreateTask(tasks);
         }
-
+        /// <summary>
+        /// Retreives all tasks from Database. Retreives all the tasks from DB (from infrastructure(data) layer).
+        /// </summary>
+        /// <returns></returns>
         public async Task<IList<TasksViewModel>> GetAllTasks()
         {
             var tasks = await _taskRepository.GetAllTasks();
 
             return _mapper.Map<IList<TasksViewModel>>(tasks);
         }
-
-        public async Task<IList<TasksViewModel>> GetSubTasks(int parentTaskId)
+        /// <summary>
+        /// Retreives all sub tasks from Database based on the parent id. 
+        /// </summary>
+        /// <param name="parentTaskId"></param>
+        /// <returns></returns>
+        public async Task<IList<TasksViewModel>> GetSubTasks(int? parentTaskId)
         {
             var tasks = await _taskRepository.GetSubTasks(parentTaskId);
             
             return _mapper.Map<IList<TasksViewModel>>(tasks);
         }
-
-        public async Task<TasksViewModel> GetTask(int taskId)
+        /// <summary>
+        /// Retreives the specific task from Database based on the task id.
+        /// </summary>
+        /// <param name="taskId"></param>
+        /// <returns></returns>
+        public async Task<TasksViewModel> GetTask(int? taskId)
         {
             var task = await _taskRepository.GetTask(taskId);
             
             return _mapper.Map<TasksViewModel>(task);
         }
 
+        /// <summary>
+        /// Retreives tasks by Status from Database based on the status code.
+        /// </summary>
+        /// <param name="status"></param>
+        /// <returns></returns>
+        public async Task<IList<Tasks>> GetTasksByStatus(string status)
+        {
+            return await _taskRepository.GetTasksByStatus(status);
+        }
+
+        /// <summary>
+        /// Updates the specific task to database.
+        /// </summary>
+        /// <param name="tasksVM"></param>
+        /// <returns></returns>
         public async Task<string> UpdateTask(TasksViewModel tasksVM)
         {
             string taskValidation = await ValidateTasks(tasksVM);
@@ -66,6 +96,12 @@ namespace TaskManagementSystem.ApplicationCore.Services
             return ValidateTasksConstants.UpdateSuccess;
         }
 
+        /// <summary>
+        /// Validates the given task if it has parent id or not. If not, then it means its a parent task and 
+        /// the below logic will find the sub tasks for the parent id.
+        /// </summary>
+        /// <param name="tasksVM"></param>
+        /// <returns></returns>
         private async Task<string> ValidateTasks(TasksViewModel tasksVM)
         {
             var task = await _taskRepository.GetTask(tasksVM.Id);
@@ -82,6 +118,11 @@ namespace TaskManagementSystem.ApplicationCore.Services
             return ValidateTasksConstants.NoTasksFound;
         }
 
+        /// <summary>
+        /// Validat sub tasks for the parent task. This will also validate the subtasks if parent task status is changed to Inp
+        /// </summary>
+        /// <param name="tasks"></param>
+        /// <returns></returns>
         private async Task<string> ValidateSubTasks(Tasks tasks)
         {
             var subTasks = await _taskRepository.GetSubTasks(tasks.Id);
@@ -91,12 +132,16 @@ namespace TaskManagementSystem.ApplicationCore.Services
 
                 switch (tasks?.State)
                 {
-                    case StatusLookUpConstants.Planned://Validate completed sub tasks
-                        validationStatus = ValidatePlannedSubTasks(subTasks);
+                    case StatusLookUpConstants.Completed://Before changing the Parent task to Completed, check if there are any in-progress sub taks.
+                        validationStatus = ValidateCompletedSubTasks(subTasks);
                         break;
 
-                    case StatusLookUpConstants.InProgress://Validate In-progress sub tasks
+                    case StatusLookUpConstants.InProgress://Before changing the Parent task to In-progress, check if atleast one sub task is in-progress.
                         validationStatus = ValidateInProgressSubTasks(subTasks);
+                        break;
+
+                    case StatusLookUpConstants.Planned://Before changing the Parent task to planned, check if atleast one sub task is in planned status or if sub tasks exists.
+                        validationStatus = ValidatePlannedSubTasks(subTasks);
                         break;
                 }
 
@@ -106,24 +151,50 @@ namespace TaskManagementSystem.ApplicationCore.Services
             return string.Empty;
         }
 
-        private string ValidateInProgressSubTasks(IList<Tasks> Tasks)
+        /// <summary>
+        /// Validate the sub tasks having atleast one non completed status before changing the Parent task to Completed.
+        /// </summary>
+        /// <param name="subTasksCount"></param>
+        /// <param name="subTasks"></param>
+        /// <returns></returns>
+        private string ValidateCompletedSubTasks(IList<Tasks> subTasks)
         {
-            var tasks = Tasks.Where(task => task.State == StatusLookUpConstants.InProgress).FirstOrDefault();
+            var tasks = subTasks.Where(task => task.State != StatusLookUpConstants.Completed).ToList();
 
-            if (tasks == null || tasks.Id == 0)
+            if (tasks == null || (tasks != null && tasks.Count < 1))
+                return string.Empty;
+            else
+                return ValidateTasksConstants.SubTaskInProgress;
+        }
+        /// <summary>
+        /// Validate the sub tasks having atleast one in-progress status before changing the Parent task to In-progress.
+        /// </summary>
+        /// <param name="subTasks"></param>
+        /// <returns></returns>
+        private string ValidateInProgressSubTasks(IList<Tasks> subTasks)
+        {
+            var tasks = subTasks.Where(task => task.State == StatusLookUpConstants.InProgress).ToList();
+
+            if (tasks == null || (tasks != null && tasks.Count < 1))
                 return ValidateTasksConstants.NoSubTaskInProgress;
             else
                 return string.Empty;
         }
 
-        private string ValidatePlannedSubTasks(IList<Tasks> Tasks)
+        /// <summary>
+        /// Validate the sub tasks having atleast one planned status before changing the Parent task to Planned.
+        /// </summary>
+        /// <param name="subTasks"></param>
+        /// <returns></returns>
+        private string ValidatePlannedSubTasks(IList<Tasks> subTasks)
         {
-            var tasks = Tasks.Where(task => task.State == StatusLookUpConstants.Planned).FirstOrDefault();
+            var tasks = subTasks.Where(task => task.State == StatusLookUpConstants.Planned).ToList();
 
-            if (tasks != null && tasks.Id > 0)
-                return ValidateTasksConstants.SubTaskPlanned;
+            if (tasks == null || (tasks != null && tasks.Count < 1))
+                return ValidateTasksConstants.NoPlannedTasksFound;
             else
                 return string.Empty;
         }
+
     }
 }

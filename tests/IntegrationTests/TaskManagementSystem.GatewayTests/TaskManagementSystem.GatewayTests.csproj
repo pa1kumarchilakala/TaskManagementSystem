@@ -7,18 +7,8 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Remove="bin\**" />
-    <Compile Remove="obj\**" />
-    <EmbeddedResource Remove="bin\**" />
-    <EmbeddedResource Remove="obj\**" />
-    <None Remove="bin\**" />
-    <None Remove="obj\**" />
-  </ItemGroup>
-
-  <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.Mvc.Testing" Version="5.0.7" />
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.7.1" />
-    <PackageReference Include="RESTFulSense" Version="1.9.0" />
     <PackageReference Include="xunit" Version="2.4.1" />
     <PackageReference Include="xunit.runner.visualstudio" Version="2.4.3">
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
@@ -31,7 +21,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\..\src\TaskManagementSystem.API\TaskManagementSystem.API\TaskManagementSystem.API.csproj" />
+    <ProjectReference Include="..\..\..\src\TaskManagementSystem.APIGateWay\TaskManagementSystem.APIGateWay\TaskManagementSystem.APIGateWay.csproj" />
+    <ProjectReference Include="..\..\..\src\TaskManagementSystem.ApplicationCore\TaskManagementSystem.ApplicationCore\TaskManagementSystem.ApplicationCore.csproj" />
   </ItemGroup>
 
 </Project>

@@ -16,10 +16,7 @@ namespace TaskManagementSystem.DependencyInjection
     {
         public static IServiceCollection AddDependencies(this IServiceCollection services, IConfiguration configuration)
         {
-            //Add Connection String
-            //services.AddDbContext<TaskManagementContext>(options =>
-            //    options.EnableSensitiveDataLogging().UseSqlServer(configuration.GetSection("ConnectionStrings:DefaultConnection").Value)
-            //);
+            //Add DbContext and set connection string
             services.AddDbContext<TaskManagementContext>(options => 
                 options.UseSqlServer(configuration.GetSection("ConnectionStrings:DefaultConnection").Value) , ServiceLifetime.Scoped);
 
@@ -30,7 +27,6 @@ namespace TaskManagementSystem.DependencyInjection
             services.AddScoped<ITaskService, TaskService>();
 
             //Automapper
-            
             services.AddAutoMapper(typeof (TaskMappingProfiles));
 
             return services;

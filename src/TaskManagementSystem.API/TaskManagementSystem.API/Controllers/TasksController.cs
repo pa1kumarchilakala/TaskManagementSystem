@@ -8,8 +8,6 @@ using TaskManagementSystem.ApplicationCore.Constants;
 using TaskManagementSystem.ApplicationCore.Interfaces;
 using TaskManagementSystem.ApplicationCore.ViewModels;
 
-// For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-
 namespace TaskManagementSystem.API.Controllers
 {
     [Route("api/[controller]")]
@@ -22,8 +20,7 @@ namespace TaskManagementSystem.API.Controllers
         {
             this._tasksService = tasksService;
         }
-        // GET: api/<TasksController>
-        //[HttpPost("CreateTask")]
+
         [HttpPost]
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -39,35 +36,74 @@ namespace TaskManagementSystem.API.Controllers
                 return BadRequest(task);
         }
 
-        // GET api/<TasksController>/5
-        //[HttpGet("GetAllTasks")]
-        //[HttpHead("GetAllTasks")]
-        [HttpGet]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        [HttpGet("all")]
+        [HttpHead]
         public async Task<IActionResult> GetAllTasks()
         {
             var tasks = await _tasksService.GetAllTasks();
 
+            if (tasks == null)
+                return NotFound();
+
             return Ok(tasks);
         }
 
-        //[HttpGet("GetSubTasks/parentTaskId")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         [HttpGet("{id}/{isParent}")]
         public async Task<IActionResult> GetSubTasks(int id, bool isParent = false)
         {
-            if (isParent) return Ok(await _tasksService.GetSubTasks(id));
-            
-            return Ok(_tasksService.GetTask(id));
+            if (isParent)
+            {
+                var tasks = await _tasksService.GetSubTasks(id);
+                if (tasks == null)
+                    return NotFound();
+
+                return Ok(tasks);
+            }
+
+            var task = _tasksService.GetTask(id);
+            if (task == null)
+                return NotFound();
+
+            return Ok(task);
         }
 
-        // POST api/<TasksController>
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         [HttpGet("{id}")]
         public async Task<IActionResult> GetTask(int id)
         {
             var tasks = await _tasksService.GetTask(id);
+            if (tasks == null)
+                return NotFound();
+
             return Ok(tasks);
         }
 
-        // PUT api/<TasksController>/5
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        [HttpGet]
+        public async Task<IActionResult> GetTasksByStatus([FromQuery] string status)
+        {
+            var tasks = await _tasksService.GetTasksByStatus(status);
+
+            if (tasks == null)
+                return NotFound();
+
+            return Ok(tasks);
+        }
+
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         [HttpPut]
         public async Task<IActionResult> UpdateTask([FromBody] TasksViewModel tasksViewModel)
         {
@@ -75,13 +111,15 @@ namespace TaskManagementSystem.API.Controllers
 
             if (result == ValidateTasksConstants.NoTasksFound)
                 return NotFound();
+            else if (result == ValidateTasksConstants.SubTaskInProgress)
+                return BadRequest(ValidateTasksConstants.SubTaskInProgress);
             else if (result == ValidateTasksConstants.NoSubTaskInProgress)
                 return BadRequest(ValidateTasksConstants.NoSubTaskInProgress);
-            else if(result == ValidateTasksConstants.SubTaskPlanned)
-                return BadRequest(ValidateTasksConstants.SubTaskPlanned);
-            
+            else if (result == ValidateTasksConstants.NoPlannedTasksFound)
+                return BadRequest(ValidateTasksConstants.NoPlannedTasksFound);
+
             return Ok();
         }
-        
+
     }
 }

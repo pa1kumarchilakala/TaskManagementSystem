@@ -41,12 +41,6 @@ namespace TaskManagementSystem.APIGateway
 
             app.UseHttpsRedirection();
 
-            app.UseRouting();
-
-            app.UseEndpoints(endpoints =>
-            {
-                endpoints.MapControllers();
-            });
             await app.UseOcelot();
         }
     }

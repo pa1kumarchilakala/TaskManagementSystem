@@ -1,0 +1,44 @@
+﻿@model TaskManagementSystem.UI.Models.TasksUIVM
+
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h1>Index</h1>
+
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>Name</th>
+            <th>Description</th>
+            <th>AssignedTo</th>
+            <th>StartDate</th>
+            <th>FinishDate</th>
+            <th>Status</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var alltasks in Model.Tasks)
+        {
+
+        <tr>
+            <td>@Html.DisplayFor(modelitem => alltasks.Name)</td>
+            <td>@Html.DisplayFor(modelitem => alltasks.Description)</td>
+            <td>@Html.DisplayFor(modelitem => alltasks.AssignedTo)</td>
+            <td>@Html.DisplayFor(modelitem => alltasks.StartDate)</td>
+            <td>@Html.DisplayFor(modelitem => alltasks.FinishDate)</td>
+            <td>@Html.DisplayFor(modelitem => alltasks.State)</td>
+            <td>
+                @Html.ActionLink("Edit", "Edit", new { /* id=item.PrimaryKey */ }) |
+                @Html.ActionLink("Details", "Details", new { /* id=item.PrimaryKey */ }) |
+                @Html.ActionLink("Delete", "Delete", new { /* id=item.PrimaryKey */ })
+            </td>
+        </tr>
+        }
+    </tbody>
+</table>

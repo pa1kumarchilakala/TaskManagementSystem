@@ -7,15 +7,17 @@ using TaskManagementSystem.Infrastructure.Data.Models;
 
 namespace TaskManagementSystem.Domain.Interfaces
 {
-    public interface ITaskRepository:IDisposable
+    public interface ITaskRepository
     {
         Task<bool> CreateTask(Tasks tasks);
 
         Task<IList<Tasks>> GetAllTasks();
 
-        Task<IList<Tasks>> GetSubTasks(int parentTaskId);
+        Task<IList<Tasks>> GetSubTasks(int? parentTaskId);
 
-        Task<Tasks> GetTask(int taskId);
+        Task<Tasks> GetTask(int? taskId);
+
+        Task<IList<Tasks>> GetTasksByStatus(string status);
 
         Task UpdateTask(Tasks task);
 

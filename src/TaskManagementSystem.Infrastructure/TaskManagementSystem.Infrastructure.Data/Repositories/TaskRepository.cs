@@ -9,7 +9,7 @@ using TaskManagementSystem.Infrastructure.Data.Models;
 
 namespace TaskManagementSystem.Infrastructure.Data.Repositories
 {
-    public class TaskRepository : ITaskRepository, IDisposable
+    public class TaskRepository : ITaskRepository
     {
         private readonly TaskManagementContext _dbContext;
 
@@ -37,25 +37,24 @@ namespace TaskManagementSystem.Infrastructure.Data.Repositories
             return await _dbContext.Tasks.ToListAsync();
         }
 
-        public async Task<IList<Tasks>> GetSubTasks(int parentTaskId)
+        public async Task<IList<Tasks>> GetSubTasks(int? parentTaskId)
         {
             return await _dbContext.Tasks.Where(task => task.ParentTask == parentTaskId).ToListAsync();
         }
 
-        public async Task<Tasks> GetTask(int taskId)
+        public async Task<Tasks> GetTask(int? taskId)
         {
-            return await _dbContext.Tasks.Where(task => task.Id == taskId).FirstOrDefaultAsync();
+            return await _dbContext.Tasks.AsNoTracking().Where(task => task.Id == taskId).FirstOrDefaultAsync();
         }
 
+        public async Task<IList<Tasks>> GetTasksByStatus(string status)
+        {
+            return await _dbContext.Tasks.Where(task => task.State == status).ToListAsync();
+        }
         public async Task UpdateTask(Tasks task)
         {
-
             _dbContext.Tasks.Update(task);
             await _dbContext.SaveChangesAsync();
-        }
-        public void Dispose()
-        {
-            _dbContext.DisposeAsync();
         }
     }
 }
